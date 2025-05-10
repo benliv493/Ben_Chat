@@ -1,47 +1,22 @@
 import socket
-import threading
-import queue
-import time
 
-addresses = []
+server = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
+server.bind(("a8:93:4a:3c:ce:a4", 5))
 
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(('127.0.0.1', 59995))
+server.listen(1)
 
+client, addr = server.accept()
 
-def HandleUser(client, addr, msg):
-    print('Connected from', addr, client)
-    addresses.append(client)
-    client.send('Connected to Server'.encode())
+try:
     while True:
-        current_message = (client.recv(1024).decode())
-        msg.put(current_message)
-        time.sleep(1)
-        current_message = ""
+        data = client.recv(1024)
+        if not data:
+            break
+        print(f"Message: {data.decode('utf-8')}")
+        message = input("enter message:")
+        client.send(message.encode("utf-8"))
+except OSError as e:
+    pass
 
-
-def Listening():
-    while True:
-        client, addr = server.accept()
-        thread = threading.Thread(target=HandleUser, args=(client, addr, messages,))
-        thread.start()
-
-
-messages = queue.Queue()
-
-thread2 = threading.Thread(target=Listening, args=())
-server.listen()
-thread2.start()
-while True:
-    print('here')
-    msg = messages.get(timeout=240)
-    msg1 = msg + '\n'
-    print(msg)
-    for client in addresses:
-        try:
-            client.send((msg1).encode())
-        except Exception as e:
-            print("error", e)
-            addresses.remove(client)
-
-
+client.close()
+server.close()
