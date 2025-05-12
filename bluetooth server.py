@@ -1,7 +1,7 @@
 import socket
 
 server = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
-server.bind(("f8:fe:5e:1e:eb:e1", 6))
+server.bind(("f8:fe:5e:1e:eb:e5", 6))
 
 server.listen(1)
 
