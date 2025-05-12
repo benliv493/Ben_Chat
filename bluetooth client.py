@@ -4,7 +4,7 @@ import time
 import signal
 
 client = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
-client.connect(('f8:fe:5e:1e:eb:e1',6))
+client.connect(('f8:fe:5e:1e:eb:e5',6))
 
 trigger_input = threading.Event()
 
